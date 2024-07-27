@@ -1,0 +1,2 @@
+# python
+about Python, AI
