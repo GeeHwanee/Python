@@ -164,4 +164,3 @@ cython_debug/
 captchaCracker/captchaImages/
 
 *.iml
-weights.h5
