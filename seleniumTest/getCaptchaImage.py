@@ -47,7 +47,7 @@ else:
 os.makedirs(save_directory, exist_ok=True)
 
 #이미지 캡쳐 반복 횟수
-num = 900
+num = 1000
 
 for i in range(num):
     # 제목 중복 방지용 타임스탬프 생성
