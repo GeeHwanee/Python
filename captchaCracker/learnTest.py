@@ -1,15 +1,19 @@
 import glob
+import platform
 import os.path
 import CaptchaCracker as cc
 
+os_name = platform.system().lower()
+
+
 # 운영체제에 따라 경로 설정
 if os_name == 'windows':
-    img_save_directory = 'D:/python/captchaImages'
+    img_save_directory = 'D:/python/captchaCracker/captchaImages'
     weights_directory = 'D:/python/captchaCracker/weights'
     target_directory = 'D:/python/captchaCracker/target'
 elif os_name == 'darwin':
     home_directory = os.path.expanduser("~")
-    img_save_directory = os.path.join(home_directory, 'python', 'captchaImages')
+    img_save_directory = os.path.join(home_directory, 'python', 'captchaCracker', 'captchaImages')
     weights_directory = os.path.join(home_directory, 'python', 'captchaCracker', 'weights')
     target_directory = os.path.join(home_directory, 'python', 'captchaCracker', 'target')
 else:
@@ -36,5 +40,6 @@ def result_img():
     AM = cc.ApplyModel(weights_path, img_width, img_height, img_length, img_char)   #결과 가중치를 가지는 모델 생성
     pred = AM.predict(target_img_path)  #결과 도출
     return pred
-
 #learn_img() #최초 가중치 생성을 위한 학습시 주석해제
+
+result_img()

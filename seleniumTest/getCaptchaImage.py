@@ -36,10 +36,10 @@ driver.get('https://www.icsports.or.kr/Captcha/String')
 
 # 운영체제에 따라 경로 설정
 if os_name == 'windows':
-    save_directory = 'D:/python/captchaImages'
+    save_directory = 'D:/python/captchaCracker/captchaImages'
 elif os_name == 'darwin':
     home_directory = os.path.expanduser("~")
-    save_directory = os.path.join(home_directory, 'python', 'captchaImages')
+    save_directory = os.path.join(home_directory, 'python', 'captchaCracker', 'captchaImages')
 else:
     raise Exception("Unsupported OS")
 
@@ -47,7 +47,7 @@ else:
 os.makedirs(save_directory, exist_ok=True)
 
 #이미지 캡쳐 반복 횟수
-num = 100
+num = 900
 
 for i in range(num):
     # 제목 중복 방지용 타임스탬프 생성
