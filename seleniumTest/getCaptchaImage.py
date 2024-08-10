@@ -47,7 +47,7 @@ else:
 os.makedirs(save_directory, exist_ok=True)
 
 #이미지 캡쳐 반복 횟수
-num = 1000
+num = 100
 
 for i in range(num):
     # 제목 중복 방지용 타임스탬프 생성
@@ -67,6 +67,6 @@ for i in range(num):
 
     # 페이지 새로고침 후 이미지 로딩 대기
     driver.refresh()
-    time.sleep(5)  # 페이지 새로고침 후 충분한 대기
+    time.sleep(2)  # 페이지 새로고침 후 충분한 대기
 
 driver.quit()
