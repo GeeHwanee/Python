@@ -9,6 +9,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from captchaCracker.learnTest import predict_img
+
+
+def get_unique_filename(directory, base_name, ext=".png"):
+    counter = 0
+    while True:
+        suffix = "" if counter == 0 else f"_{counter}"
+        path = os.path.join(directory, f"{base_name}{suffix}{ext}")
+        if not os.path.exists(path):
+            return path
+        counter += 1
+
 # OS 가져오기
 os_name = platform.system().lower()
 
@@ -29,10 +41,13 @@ options.add_argument(
 # window일 때 소스코드 내부 chromedriver.exe 사용, mac일 때 brew에서 찾아서 씀
 service = Service('chromedriver.exe' if os_name == 'windows' else '')
 # 드라이버 위치 경로 입력
-driver = webdriver.Chrome(service=service, options=options)
+driver = webdriver.Chrome(
+    executable_path='chromedriver.exe' if os_name == 'windows' else '',
+    options=options
+)
 
-# 인천광역시 체육회 캡쳐 이미지 제공
-driver.get('https://www.icsports.or.kr/Captcha/String')
+#  이미지 제공
+driver.get('')
 
 # 운영체제에 따라 경로 설정
 if os_name == 'windows':
@@ -50,23 +65,34 @@ os.makedirs(save_directory, exist_ok=True)
 num = 100
 
 for i in range(num):
-    # 제목 중복 방지용 타임스탬프 생성
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S%f')
-    # 홈 경로 매핑
-    # 파일 이름, 확장자 지정
-    file_name = os.path.join(save_directory, f'image_{timestamp}.png')
+    temp_path = os.path.join(save_directory, "temp.png")
 
     try:
-        # 이미지 요소 대기
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'img')))
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.TAG_NAME, 'img'))
+        )
         img = driver.find_element(By.TAG_NAME, 'img')
-        img.screenshot(file_name)
-        print(f"Saved screenshot as {file_name}")
-    except Exception as e:
-        print(f"Error taking screenshot: {e}")
+        img.screenshot(temp_path)
 
-    # 페이지 새로고침 후 이미지 로딩 대기
+        # 캡챠 예측
+        pred_text = predict_img(
+            temp_path,
+            weights_path='D:/python/captchaCracker/weights/weights.h5'
+        )
+
+        # 중복 방지된 최종 파일명 생성
+        final_path = get_unique_filename(save_directory, pred_text)
+
+        os.rename(temp_path, final_path)
+        print(f"Saved: {final_path}")
+
+    except Exception as e:
+        print(f"Error: {e}")
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+
     driver.refresh()
-    time.sleep(2)  # 페이지 새로고침 후 충분한 대기
+    time.sleep(2)
 
 driver.quit()
+
